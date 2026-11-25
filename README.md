@@ -16,8 +16,8 @@ train.py - file with training of model
 Clone the repository:
 
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd ml-fastapi-docker
+git clone https://github.com/Hamseu/Machine-Learning-Classes.git
+cd Machine-Learning-Classes
 ```
 
 Install the required dependencies:
@@ -36,11 +36,7 @@ python train.py
 
 The trained model is saved as `model.joblib`.
 
-This step can be skipped if the saved model already exists.
-
 ## Running the API Locally
-
-Start the FastAPI application using Uvicorn:
 
 ```bash
 python -m uvicorn main:app --reload
@@ -61,7 +57,7 @@ Example response:
 
 ```json
 {
-    "message": "ML API is running"
+    "message": "API is running"
 }
 ```
 
@@ -99,7 +95,7 @@ Example response:
 
 ## Running with Docker
 
-*Docker must be installed and running before executing commands above.*
+*Docker must be installed and running before executing commands below*
 
 ### Build the Docker Image
 
@@ -118,13 +114,6 @@ docker run -d -p 8000:8000 --name iris-container iris-api
 ```bash
 docker ps
 ```
-
-### View Application Logs
-
-```bash
-docker logs iris-container
-```
-
 ### Stop the Container
 
 ```bash
@@ -135,12 +124,6 @@ docker stop iris-container
 
 ```bash
 docker start iris-container
-```
-
-### Remove the Container
-
-```bash
-docker rm -f iris-container
 ```
 
 ## API Testing
