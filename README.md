@@ -106,7 +106,7 @@ docker build -t iris-api .
 ### Run the Docker Container
 
 ```bash
-docker run -d -p 8000:8000 --name iris-container iris-api
+docker run -d -p 8000:8000 --name simple-ml-api iris-api
 ```
 
 ### Verify the Running Container
@@ -117,13 +117,13 @@ docker ps
 ### Stop the Container
 
 ```bash
-docker stop iris-container
+docker stop simple-ml-api
 ```
 
 ### Restart the Container
 
 ```bash
-docker start iris-container
+docker start simple-ml-api
 ```
 
 ## API Testing
