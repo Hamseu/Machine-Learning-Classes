@@ -13,111 +13,143 @@ Requirements.txt - list of dependencies and their versions
 train.py - file with training of model
 
 ## Instructions:
-4. Installation
-
 Clone the repository:
 
+```bash
 git clone YOUR_REPOSITORY_URL
 cd ml-fastapi-docker
+```
 
 Install the required dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
-5. Model Training
+## Model Training
 
-To train the model and generate the model.joblib file, execute:
+Train and save the machine learning model:
 
+```bash
 python train.py
+```
 
-This step can be skipped if the trained model file already exists.
+The trained model is saved as `model.joblib`.
 
-6. Running the API Locally
+This step can be skipped if the saved model already exists.
+
+## Running the API Locally
 
 Start the FastAPI application using Uvicorn:
 
+```bash
 python -m uvicorn main:app --reload
+```
 
 The API will be available at:
 
-Root endpoint: http://localhost:8000/
+- Root endpoint: http://localhost:8000/
+- Swagger documentation: http://localhost:8000/docs
 
-Swagger documentation: http://localhost:8000/docs
+## API Endpoints
 
-7. API Endpoints
-
-GET /
+### GET /
 
 Checks whether the API is running.
 
 Example response:
 
+```json
 {
     "message": "ML API is running"
 }
+```
 
-POST /predict
+### POST /predict
 
-Accepts four numerical features and returns a predicted Iris species.
+Accepts four numerical features and returns the predicted Iris species.
 
 Example request:
 
+```json
 {
     "sepal_length": 5.1,
     "sepal_width": 3.5,
     "petal_length": 1.4,
     "petal_width": 0.2
 }
+```
 
 Example response:
 
+```json
 {
     "prediction": 0,
     "species": "Setosa"
 }
+```
 
-Target classes:
+### Target Classes
 
-Class
+| Class | Species |
+|-------|------------|
+| 0     | Setosa     |
+| 1     | Versicolor |
+| 2     | Virginica  |
 
-Species
+## Running with Docker
 
-0
+*Docker must be installed and running before executing commands above.*
 
-Setosa
+### Build the Docker Image
 
-1
-
-Versicolor
-
-2
-
-Virginica
-
-8. Running with Docker
-
-Docker must be installed and running before executing the following commands.
-
-Build the Docker image
-
+```bash
 docker build -t iris-api .
+```
 
-Run the Docker container
+### Run the Docker Container
 
+```bash
 docker run -d -p 8000:8000 --name iris-container iris-api
+```
 
-Verify that the container is running
+### Verify the Running Container
 
+```bash
 docker ps
+```
 
-View application logs
+### View Application Logs
 
+```bash
 docker logs iris-container
+```
 
-Stop the container
+### Stop the Container
 
+```bash
 docker stop iris-container
+```
 
-Restart the container
+### Restart the Container
 
+```bash
 docker start iris-container
+```
+
+### Remove the Container
+
+```bash
+docker rm -f iris-container
+```
+
+## API Testing
+
+1. Open http://localhost:8000/docs.
+2. Select the POST /predict endpoint.
+3. Click "Try it out".
+4. Enter the input features in JSON format.
+5. Click "Execute".
+6. Verify the prediction and HTTP status code.
+
+   Both docker version and local are working well.
