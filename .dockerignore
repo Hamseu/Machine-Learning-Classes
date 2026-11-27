@@ -3,4 +3,9 @@
 venv
 __pycache__
 .idea
-.ipynb_checkpoints
+ml-system-app/node_modules
+ml-system-app/.angular
+ml-system-app/dist
+mlruns
+evaluation
+models

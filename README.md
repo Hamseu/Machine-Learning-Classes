@@ -1,141 +1,45 @@
-# Machine-Learning-Classes
+# Iris ML Studio
 
-# GitHub link:
-https://github.com/Hamseu/Machine-Learning-Classes.git
+A full-cycle Iris classification application with FastAPI, Angular, Tailwind CSS and MLflow. Train logistic regression and random forest models, predict flower species, and inspect training metrics and prediction logs. MLflow stores runs and model artifacts in files; no database or login is required.
 
-Currently this is practice work 6 made by Frolov Yevgeniy
+## Docker
 
-## Description:
-This is prototype of ML system, it was trained on IRIS dataset using logistical regression. It's built on fast-api. Its container is virtualized using docker.
-
-## Items:
-Dockerfile - settings for docker
-Main.py - main file of fast-api
-model.joblib - artifact of our model
-Requirements.txt - list of dependencies and their versions
-train.py - file with training of model
-
-## Instructions:
-Clone the repository:
-
-```bash
-git clone https://github.com/Hamseu/Machine-Learning-Classes.git
-cd Machine-Learning-Classes
+```sh
+docker build -t iris-studio .
+docker run --rm -p 8000:8000 -v iris-mlruns:/app/mlruns -v iris-evaluation:/app/evaluation iris-studio
 ```
 
-Install the required dependencies:
+Open http://localhost:8000. On a fresh tracking volume the container trains the models at startup. Runs and evaluation reports persist in the named volumes. To retrain, run `docker exec <container> python train.py`; the latest successful run of each model is offered for prediction. Do not share a file store between multiple independent writers.
 
-```bash
+## Local development
+
+Use Python 3.12 and Node.js 20.19+ (or 22.12+). From the project root:
+
+```sh
+python -m venv .venv
+# Activate the virtual environment, then:
 pip install -r requirements.txt
-```
-
-## Model Training
-
-Train and save the machine learning model:
-
-```bash
 python train.py
+uvicorn main:app --reload
 ```
 
-The trained model is saved as `model.joblib`.
+In another terminal:
 
-## Running the API Locally
-
-```bash
-python -m uvicorn main:app --reload
+```sh
+cd ml-system-app
+npm install
+npm start
 ```
 
-The API will be available at:
+Open http://localhost:4200. API documentation is at http://localhost:8000/docs. To inspect MLflow's native UI, run `python start_mlflow.py` from the project root and open http://localhost:5000. The application also includes an Experiments page showing run parameters, metrics, and prediction logs. MLflow artifacts are under `mlruns/`; evaluation reports are under `evaluation/`. Set `MLFLOW_TRACKING_URI` to the same file URI for training, the API, and the UI to choose another store. The local MLflow UI reads the local store; runs inside Docker remain in the Docker volume and are separate.
 
-- Root endpoint: http://localhost:8000/
-- Swagger documentation: http://localhost:8000/docs
+## Tests
 
-## API Endpoints
-
-### GET /
-
-Checks whether the API is running.
-
-Example response:
-
-```json
-{
-    "message": "API is running"
-}
+```sh
+python -m pytest tests
+cd ml-system-app
+npm run build
 ```
 
-### POST /predict
+The API accepts positive finite measurements in centimetres, validates feature names and model/dataset compatibility, and returns a species name. The example Iris measurements 5.1, 3.5, 1.4, 0.2 predict Setosa.
 
-Accepts four numerical features and returns the predicted Iris species.
-
-Example request:
-
-```json
-{
-    "sepal_length": 5.1,
-    "sepal_width": 3.5,
-    "petal_length": 1.4,
-    "petal_width": 0.2
-}
-```
-
-Example response:
-
-```json
-{
-    "prediction": 0,
-    "species": "Setosa"
-}
-```
-
-### Target Classes
-
-| Class | Species |
-|-------|------------|
-| 0     | Setosa     |
-| 1     | Versicolor |
-| 2     | Virginica  |
-
-## Running with Docker
-
-*Docker must be installed and running before executing commands below*
-
-### Build the Docker Image
-
-```bash
-docker build -t iris-api .
-```
-
-### Run the Docker Container
-
-```bash
-docker run -d -p 8000:8000 --name simple-ml-api iris-api
-```
-
-### Verify the Running Container
-
-```bash
-docker ps
-```
-### Stop the Container
-
-```bash
-docker stop simple-ml-api
-```
-
-### Restart the Container
-
-```bash
-docker start simple-ml-api
-```
-
-## API Testing
-
-1. Open http://localhost:8000/docs.
-2. Select the POST /predict endpoint.
-3. Click "Try it out".
-4. Enter the input features in JSON format.
-5. Click "Execute".
-6. Verify the prediction and HTTP status code.
-
-   Both docker version and local are working well.
