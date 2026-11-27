@@ -1,4 +1,111 @@
-<section class="intro"><div><p class="eyebrow">PREDICTION WORKSPACE</p><h1>Get to know your iris.</h1><p>Choose a model and enter your flower measurements to predict its species.</p></div><span class="badge">IRIS DATASET · CLASSIFICATION</span></section>
-<div class="workspace"><aside class="panel settings"><div class="section-head"><span class="step">01</span><div><h2>Configuration</h2><p>Choose your dataset and model</p></div></div><label for="dataset">Dataset</label><select id="dataset" [(ngModel)]="datasetId" (ngModelChange)="datasetChanged()"><option value="">Select a dataset</option>@for (item of datasets; track item.id) { <option [value]="item.id">{{ item.name }}</option> }</select><p class="hint">{{ dataset?.description || 'Select a dataset to get started.' }}</p><label for="model">Model</label><select id="model" [(ngModel)]="modelId" (ngModelChange)="modelChanged()" [disabled]="!dataset"><option value="">Not chosen</option>@for (item of availableModels; track item.id) { <option [value]="item.id">{{ item.name }}</option> }</select>@if (model) { <div class="model-info"><span>TEST ACCURACY</span><strong>{{ model.metrics['accuracy'] | percent:'1.0-1' }}</strong><small>Run {{ model.id.slice(0, 8) }}</small></div> } @else if (dataset && !availableModels.length) { <p class="hint">No trained models found. Run the training pipeline first.</p> }</aside>
-<section class="panel measurements"><div class="section-head"><span class="step">02</span><div><h2>Measurements</h2><p>Enter the dimensions of your flower</p></div></div>@if (dataset) { <form (ngSubmit)="submit()" #form="ngForm"><div class="field-grid">@for (feature of dataset.features; track feature.id) { <div><label [for]="feature.id">{{ feature.label }}</label><div class="input-wrap"><input [id]="feature.id" [name]="feature.id" type="number" min="0.000001" step="any" required [(ngModel)]="values[feature.id]" placeholder="0.0"><span>{{ feature.unit }}</span></div></div> }</div><button type="submit" [disabled]="!form.valid || !model || loading">{{ loading ? 'Predicting…' : 'Predict species >' }}</button></form> } @else { <div class="empty">Select a dataset to see its input fields.</div> } @if (error) { <p class="error" role="alert">{{ error }}</p> }</section>
-<aside class="panel result"><div class="section-head"><span class="step">03</span><div><h2>Prediction</h2><p>Your result appears here</p></div></div><div class="result-body"><div class="flower">?</div>@if (result) { <span class="eyebrow">PREDICTED SPECIES</span><h3>{{ result }}</h3><p>Predicted using {{ model?.name }}</p> } @else { <h3>Ready when you are</h3><p>Fill in the measurements and run a prediction.</p> }</div></aside></div>
+ï»¿<section class="intro">
+  <div>
+    <p class="eyebrow">PREDICTION WORKSPACE</p>
+    <h1>Get to know your iris.</h1>
+    <p>Choose a model and enter your flower measurements to predict its species.</p>
+  </div>
+  <span class="badge">IRIS DATASET Â· CLASSIFICATION</span>
+</section>
+
+<div class="workspace">
+  <aside class="panel settings">
+    <div class="section-head">
+      <span class="step">01</span>
+      <div>
+        <h2>Configuration</h2>
+        <p>Choose your dataset and model</p>
+      </div>
+    </div>
+
+    <label for="dataset">Dataset</label>
+    <select id="dataset" [(ngModel)]="datasetId" (ngModelChange)="datasetChanged()">
+      <option value="">Select a dataset</option>
+      @for (item of datasets; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+    <p class="hint">{{ dataset?.description || 'Select a dataset to get started.' }}</p>
+
+    <label for="model">Model</label>
+    <select id="model" [(ngModel)]="modelId" (ngModelChange)="modelChanged()" [disabled]="!dataset">
+      <option value="">Not chosen</option>
+      @for (item of availableModels; track item.id) {
+        <option [value]="item.id">{{ item.name }}</option>
+      }
+    </select>
+
+    @if (model) {
+      <div class="model-info">
+        <span>TEST ACCURACY</span>
+        <strong>{{ model.metrics['accuracy'] | percent: '1.0-1' }}</strong>
+        <small>Run {{ model.id.slice(0, 8) }}</small>
+      </div>
+    } @else if (dataset && !availableModels.length) {
+      <p class="hint">No trained models found. Run the training pipeline first.</p>
+    }
+  </aside>
+
+  <section class="panel measurements">
+    <div class="section-head">
+      <span class="step">02</span>
+      <div>
+        <h2>Measurements</h2>
+        <p>Enter the dimensions of your flower</p>
+      </div>
+    </div>
+
+    @if (dataset) {
+      <form (ngSubmit)="submit()" #form="ngForm">
+        <div class="field-grid">
+          @for (feature of dataset.features; track feature.id) {
+            <div>
+              <label [for]="feature.id">{{ feature.label }}</label>
+              <div class="input-wrap">
+                <input
+                  [id]="feature.id"
+                  [name]="feature.id"
+                  type="number"
+                  min="0.000001"
+                  step="any"
+                  required
+                  [(ngModel)]="values[feature.id]"
+                  placeholder="0.0"
+                />
+                <span>{{ feature.unit }}</span>
+              </div>
+            </div>
+          }
+        </div>
+        <button type="submit" [disabled]="!form.valid || !model || loading">
+          {{ loading ? 'Predictingâ€¦' : 'Predict species >' }}
+        </button>
+      </form>
+    } @else {
+      <div class="empty">Select a dataset to see its input fields.</div>
+    }
+    @if (error) {
+      <p class="error" role="alert">{{ error }}</p>
+    }
+  </section>
+
+  <aside class="panel result">
+    <div class="section-head">
+      <span class="step">03</span>
+      <div>
+        <h2>Prediction</h2>
+        <p>Your result appears here</p>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="flower">?</div>
+      @if (result) {
+        <span class="eyebrow">PREDICTED SPECIES</span>
+        <h3>{{ result }}</h3>
+        <p>Predicted using {{ model?.name }}</p>
+      } @else {
+        <h3>Ready when you are</h3>
+        <p>Fill in the measurements and run a prediction.</p>
+      }
+    </div>
+  </aside>
+</div>
