@@ -1,5 +1,6 @@
 # Iris-Api
 
+GitHub Link - https://github.com/Hamseu/Machine-Learning-Classes.git 
 A full-cycle Iris classification application with FastAPI, Angular, Tailwind CSS and MLflow. I have trained Train logistic regression and random forest models to predict flower species, and inspect training metrics and prediction logs. MLflow stores runs, model artifacts in files.
 
 ## Docker
